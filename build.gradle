@@ -1,0 +1,124 @@
+defaultTasks "build"
+
+allprojects {
+    apply plugin: 'idea'
+}
+
+idea {
+    project {
+        languageLevel = '1.7'
+    }
+}
+
+idea {
+	module {
+	    downloadJavadoc = true
+	    downloadSources = true
+	}
+}
+
+//see http://www.gradle.org/docs/current/dsl/org.gradle.api.artifacts.ResolutionStrategy.html
+configurations.all {
+    resolutionStrategy.failOnVersionConflict()
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    group = 'com.github.gcaldemo'
+    version = '1.0-DEV'
+    //see http://forums.gradle.org/gradle/topics/6caj90zrfqr0l about 'extra properties'
+    ext.springVersion = '3.2.1.RELEASE'
+    ext.springSecurityVersion = '3.1.3.RELEASE'
+    ext.wicketVersion = '6.6.0'
+    ext.wicketStuffVersion = '6.5.0'
+    ext.wicketBootstrapVersion = '0.7.6'
+
+    ext.jettyVersion = '8.1.9.v20130131'
+    ext.slf4jVersion = '1.7.2'
+
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+
+    sourceSets {
+        main {
+            resources {
+                srcDir 'src/main/resources'
+                srcDir 'src/main/java'
+            }
+        }
+        test {
+            resources {
+                srcDir 'src/test/resources'
+                srcDir 'src/test/java'
+            }
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        //WicketStuff
+        mavenRepo(url: 'https://oss.sonatype.org/content/repositories/releases/')
+        mavenRepo(url: 'http://maven.springframework.org/release')
+        //needed for Spring Security OAuth
+        mavenRepo(url: 'http://maven.springframework.org/milestone')
+        //last resort
+        mavenLocal()
+    }
+
+    dependencies {
+
+        ext.wicketDeps = [
+                "org.apache.wicket:wicket:$wicketVersion",
+                "org.apache.wicket:wicket-spring:$wicketVersion",
+                "org.wicketstuff:wicketstuff-annotation:$wicketStuffVersion",
+                "de.agilecoders.wicket:bootstrap:$wicketBootstrapVersion"
+        ]
+
+        ext.springDeps = [
+                "org.springframework:spring-core:$springVersion",
+                "org.springframework:spring-beans:$springVersion",
+                "org.springframework:spring-context:$springVersion",
+                "org.springframework:spring-context-support:$springVersion",
+        ]
+
+        ext.commonsDeps = [
+                'com.google.guava:guava:14.0'
+        ]
+
+        ext.testDeps = [
+                "junit:junit:4.11"
+        ]
+
+        ext.jettyDeps = [
+                //needed for running a Jetty for local testing
+                "org.eclipse.jetty:jetty-server:$jettyVersion",
+                "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+        ]
+
+        ext.loggingDeps = [
+                "org.slf4j:slf4j-log4j12:$slf4jVersion",
+                "org.slf4j:jcl-over-slf4j:$slf4jVersion",
+                "org.slf4j:slf4j-api:$slf4jVersion",
+                'log4j:log4j:1.2.17'
+        ]
+
+        //see http://stackoverflow.com/questions/1979957/maven-dependency-for-servlet-3-0-api
+        ext.servletDeps = [
+                "javax.servlet:javax.servlet-api:3.0.1"
+        ]
+
+        ext.oauthDeps = [
+                "org.springframework.security.oauth:spring-security-oauth2:1.0.0.RC3",
+                "org.codehaus.jackson:jackson-core-asl:1.9.12",
+                "org.codehaus.jackson:jackson-mapper-asl:1.9.12"
+        ]
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.4'
+}

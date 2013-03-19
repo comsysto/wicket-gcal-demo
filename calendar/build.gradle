@@ -1,0 +1,1 @@
+group = 'com.github.gcaldemo'archivesBaseName = 'calendar'dependencies {    compile commonsDeps    compile loggingDeps    compile springDeps    compile oauthDeps    testCompile testDeps}

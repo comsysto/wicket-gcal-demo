@@ -1,0 +1,44 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+group = 'com.github.gcaldemo'
+archivesBaseName = 'ui'
+
+// Workaround for missing configuration 'provided'.
+//
+// See http://blog.codeaholics.org/2012/emulating-mavens-provided-scope-in-gradle/ and
+// http://issues.gradle.org/browse/GRADLE-784
+configurations {
+    provided
+}
+
+sourceSets {
+    main { compileClasspath += configurations.provided }
+    test { compileClasspath += configurations.provided }
+    test { runtimeClasspath += configurations.provided  }
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += configurations.provided
+    }
+}
+
+dependencies {
+    compile project(':calendar')
+    compile commonsDeps
+    compile loggingDeps
+    compile springDeps
+    compile wicketDeps
+
+    provided servletDeps
+
+    testCompile testDeps
+    testCompile jettyDeps
+}
+
+task runApp(type: JavaExec) {
+    main = "com.github.gcaldemo.Start"
+    classpath sourceSets.test.runtimeClasspath
+    standardInput=System.in
+}

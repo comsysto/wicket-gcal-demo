@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Google Calendar Demo</title>
+    <meta name="description" content="Simple demo application for Wicket Google Calendar integration">
+    <meta name="author" content="Daniel Mitterdorfer">
+</head>
+
+<body>
+
+<div class="container">
+    <section id="content">
+        <div class="page-header">
+            <h1>Create Event</h1>
+        </div>
+        <div class="row">
+            <form wicket:id="form" class="form-horizontal">
+                <div wicket:id="feedback"/>
+
+                <div class="control-group">
+                    <label class="control-label" wicket:for="date">Date</label>
+                    <div class="controls">
+                        <input type="date" required="required" wicket:id="date" autofocus="autofocus">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" wicket:for="calendar">Calendar</label>
+                    <div class="controls">
+                        <select wicket:id="calendar"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" wicket:for="title">Title</label>
+                    <div class="controls">
+                        <!-- disable the browser's autocomplete behaviour, we do not want to autocomplete event titles -->
+                        <input type="text" autocomplete="off" wicket:id="title"  />
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" wicket:id="save" class="btn btn-primary">Save</button>
+                    <button type="button" wicket:id="cancel" class="btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer
+    ================================================== -->
+    <footer class="footer">
+        <p>&copy; Daniel Mitterdorfer</p>
+    </footer>
+</div>
+</body>
+</html>
